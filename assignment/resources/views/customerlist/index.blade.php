@@ -93,10 +93,12 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Avatar</label>
                             <div class="col-sm-12">
-                                <input class="form-control" type="file" id="images" name="images">
+                                <input class="form-control" type="file" id="images" name="images" onchange="readURL(this);">
                             </div>
                             <div class="col-sm-12">
-                                <label id="imgs" class="form-control"></label>
+                                <input type="hidden" name="hidden_image" id="hidden_image">
+                                <img id="modal-preview"  alt="Preview" class="form-group hidden" width="100" height="100">
+                                {{-- <label id="imgs" class="form-control"></label> --}}
                             </div>
                         </div>
 
@@ -171,7 +173,11 @@
             $('#shop_id').val(data.shop_id);
             $('#first_name').val(data.first_name);
             $('#last_name').val(data.last_name);
-            $('#imgs').text(data.avatar);
+            if(data.avatar)
+            {
+                $('#modal-preview').attr('src'+'public/storage/'+data.avatar);
+                $('#hidden_image').attr('src'+'public/storage/'+data.avatar);
+            }
              $('#city').val(data.city);
             $('#birthdate').val(data.birthdate);
         })
@@ -240,5 +246,18 @@
     $(function() {
        $("#birthdate").datepicker();
     });
+    function readURL(input, id) 
+    {
+        id = id || '#modal-preview';
+        if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+        $(id).attr('src', e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
+        $('#modal-preview').removeClass('hidden');
+        $('#start').hide();
+        }
+    }
  </script>
 </html>
